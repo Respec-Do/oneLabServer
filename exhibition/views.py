@@ -15,17 +15,18 @@ from member.models import Member
 from school.models import School
 from university.models import University
 
-
+# 공모전 작성 View
 class ExhibitionWriteView(View):
+    # 공모전 작성페이지로 render 방식으로 전달
     def get(self, request):
         return render(request, 'exhibition/write.html')
 
+    # 작성할 때, 오류가 발생할 경우 롤백하기 위해 transaction.atomic 사용
     @transaction.atomic
     def post(self, request):
+        # data에 POST방식으로 담은 데이터를 전달
         data = request.POST
-
-        files = request.FILES
-
+        # member
         member = Member(**request.session['member'])
         school=School.objects.get(member=member)
         # school = School(**request.session['member'])
