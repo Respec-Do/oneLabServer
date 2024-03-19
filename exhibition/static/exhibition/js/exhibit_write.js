@@ -1,10 +1,11 @@
+// textarea의 자동크기 조절
 autosize($("textarea"));
 
 const uploads = document.querySelectorAll("input.upload");
 const thumbnails = document.querySelectorAll("label.attach img.thumbnail");
-
 const upload_file = document.querySelector("input.upload-download");
-console.log(upload_file);
+
+// 다운로드 받을 파일 저장
 upload_file.addEventListener("change", (e)=>{
     let reader = new FileReader();
     let file = e.target.files[0];
@@ -13,21 +14,16 @@ upload_file.addEventListener("change", (e)=>{
         let url = e.target.result;
         if(!url.includes('image')) {
             let filename = file.name;
-            let extension = filename.split('.').pop();
             let filenameElement = document.querySelector(".download-wrap h6");
             filenameElement.textContent = filename;
-            // let extensionElement = document.createElement("span");
-            // extensionElement.textContent = `.${extension}`;
-            // filenameElement.appendChild(extensionElement);
         }
         else{
             let modalMessage = "<span>hwp, pdf, txt, word 파일만 등록 가능합니다.</span>"
-
         }
     })
 })
 
-
+// 이미지 파일 저장
 uploads.forEach((upload, i) => {
     upload.addEventListener("change", (e) => {
         let reader = new FileReader();
@@ -50,11 +46,7 @@ uploads.forEach((upload, i) => {
     });
 });
 
-
-
-
-
-
+// 이미지 저장 취소 버튼 활성화
 document.querySelectorAll("div.x").forEach((cancel, i) => {
     cancel.addEventListener("click", (e) => {
         e.preventDefault();

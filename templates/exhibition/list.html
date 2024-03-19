@@ -68,6 +68,7 @@
                                             <div class="css-1pulbqw">
                                                 <div class="css-3xk0il">
                                                     {% for exhibitionfile in exhibition.exhibitionfile_set.all %}
+                                                        <!-- 대표이미지로 지정해둔 파일만 화면에 표시 -->
                                                         {% if exhibitionfile.preview %}
                                                             <img src="/upload/{{ exhibitionfile.path }}" class="preview">
                                                         {% endif %}
@@ -75,7 +76,6 @@
                                                 </div>
                                                 <div class="css-qn01ot">
                                                     <div class="css-18m1pdx">{{ exhibition.exhibition_title }}</div>
-        {#                                            <div class="css-ivvewn">성공 메이커 이야기 연말 결산</div>#}
                                                 </div>
                                             </div>
                                         </div>

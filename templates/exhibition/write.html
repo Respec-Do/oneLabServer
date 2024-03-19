@@ -24,7 +24,9 @@
                             <span class="sidebar-reward-info-flag1">공모전</span>
                             <span class="sidebar-reward-info-flag2">글쓰기</span>
                         </div>
+        
                         <a href="" class="sidebar-reward-info-project-name" target="_blank">
+                            <!-- 작성자의 이름 표기 -->
                             {{ request.session.member.member_name }} 님의<br>공모전 글 작성
                         </a>
                         <button class="project-number-box" type="button">
@@ -52,6 +54,7 @@
                         <!-- 랩원 등록 시, 랩원 계정 추가하는 섹션 -->
                         <div class="maker-info-container-btn-wrapper">
                             <h2 class="page-title">공모전 글쓰기</h2>
+                            <!-- 저장하기 버튼 -->
                             <button class="save-btn" onclick="send">
                                 <span>
                                     <span class="save-btn-text">저장하기</span>
@@ -87,7 +90,7 @@
                                     <div class="profile-img">
                                         <span></span>
                                     </div>
-                                    <!-- 회원 이름 -->
+                                    <!-- 작성자 이름 표기 -->
                                     <div>{{ request.session.member.member_name }}</div>
                                 </div>
                                 <div class="project-navbar-btn-group">
@@ -124,6 +127,7 @@
                                         <div class="text-field">
                                             <label></label>
                                             <div class="text-field-field">
+                                                <!-- 공모전 제목 작성하는 곳 -->
                                                 <input placeholder="제목을 입력해 주세요" maxlength="40" type="text" class="input-input input-lg" name="exhibition-title">
                                             </div>
                                             <em class="helper-message-helper-message"></em>
@@ -159,6 +163,7 @@
                                         </div>
                                     </div>
                                     <div class="section-content" style="margin-top: 25px;">
+                                        <!-- 이미지 업로드 -->
                                         <div class="attach-wrap">
                                             <label for="upload1" class="attach">
                                                 <img src="" class="thumbnail">
@@ -190,7 +195,7 @@
                                         <input type="file" name="upload3" id="upload3" class="upload" style="display: none;">
                                     </div>
                                 </section>
-                                 <!-- 프로젝트 요약 레이아웃 -->
+                                <!-- 공모전 내용 작성 -->
                                 <section class="section-container">
                                     <div style="max-width: 712px;">
                                         <div class="section-header">
@@ -204,6 +209,7 @@
                                                     <div class="wide column-2"></div>
                                                     <div class="wide column-4">
                                                         <div class="wz input">
+                                                            <!-- 공모전 내용 작성하는 곳 -->
                                                             <textarea placeholder="내용 입력" helper="[object Object]" maxlength="1000" name="exhibition-content" rows="15" class="content-input"></textarea>
                                                         </div>
                                                         
@@ -213,8 +219,8 @@
                                         </div>
                                         <em class="content-helper helper-msg">1000자 남음</em>
                                     </div>
-
                                 </section>
+                                <!-- 공모전 양식 업로드 -->
                                 <section class="section-container">
                                     <div class="section-header">
                                         <h3 class="section-title section-is-required">공모전 양식 업로드</h3>
@@ -237,6 +243,7 @@
                                         <h3 class="section-title section-is-required">공모전 URL 입력</h3>
                                         <div class="section-guide"></div>
                                     </div>
+                                    <!-- 공모전 url 입력하는 곳 -->
                                     <div class="section-description">해당 공모전으로 이동할 수 있는 URL을 입력해주세요.</div>
                                     <div class="section-content">
                                         <div class="text-field">

@@ -20,8 +20,10 @@
                             <div class="community-content-wrapper">
                                 <div class="community-content">
                                     <div class="community-detail-container">
+                                    <!-- 관리자면 관리자페이지의 공모전 목록으로 이동-->
                                     {% if request.session.member.member_status == False %}
                                         <a href="{% url 'member:admin_main_exhibition' %}">
+                                    <!-- 일반 회원이라면, 메인페이지의 공모전 목록으로 이동 -->
                                     {% elif request.session.member.member_status == True %}
                                         <a href="{% url 'exhibition:list' %}">
                                     {% endif %}
@@ -57,6 +59,7 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            <!-- 작성된 날짜 표기 -->
                                             <p class="community-write-date">{{ exhibition.created_date }}</p>
                                         </div>
                                         <div class="community-detail-contents-container">
@@ -71,31 +74,13 @@
                                                                         <div class="DeliveryInfoField_container">
                                                                             <div class="DeliveryInfoField_deliveryContent">
                                                                                 <span aria-hidden="true"></span>
-                                                                                <!-- class="DeliveryInfoField_deliveryDesc" -->
                                                                                 <ul class="">
                                                                                     <li>{{ member_name }}</li>
-                                                                                    <!-- <li>
-                                                                                <div class="DetailInfoHeader_shippingChargeContainer">
-                                                                                    <span class="DetailInfoHeader_shippingChargeText">배송비</span>
-                                                                                    <span>3,500원</span>
-                                                                                </div>
-                                                                            </li> -->
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
                                                                     </dd>
                                                                 </div>
-    {#                                                            <div class="DetailInfoHeader_termsBox">#}
-    {#                                                                <dt class="DetailInfoHeader_terms">신청인원</dt>#}
-    {#                                                                <dd class="DetailInfoHeader_termsDescription">#}
-    {#                                                                    <div class="SupporterClubSubscriptionBanner_supporterClub">#}
-    {#                                                                        <div class="DetailInfoHeader_orderInfo">#}
-    {#                                                                            <span class="DetailInfoHeader_texts">1,631</span>#}
-    {#                                                                            명 참여#}
-    {#                                                                        </div>#}
-    {#                                                                    </div>#}
-    {#                                                                </dd>#}
-    {#                                                            </div>#}
                                                             </dl>
                                                         </div>
                                                 <!-- 파일 출력 쪽 -->
@@ -103,6 +88,7 @@
                                                         <dl>
                                                             <div class="detail-info-header-app-coupon-banner">
                                                                 {% for file in exhibition.exhibitionfile_set.all %}
+                                                                    <!-- 다운로드 경로를 통해 저장된 파일을 다운로드 -->
                                                                     {% if file.download_path %}
                                                                         <a href="{% url 'download' file_path=file.download_path %}" class="available-coupon-button-button">
                                                                         <input type="file" style="display: none" />양식 다운로드
@@ -111,20 +97,17 @@
                                                                         </svg>
                                                                     </a>
                                                                     {% endif %}
-                                                                    
                                                                 {% endfor %}
-                                                                    
                                                             </div>
                                                             <div></div>
                                                             <div></div>
                                                         </dl>
                                                     </div>
                                                     </div>
-                                                    <!-- 배송 혜택 부분 -->
-                                                    
                                                     <div class="slick-slide slick-active slick-current" id="big" aria-hidden="false" style="outline: none; width: 705px; margin-top: 92px; margin-left: 276px">
                                                         <div>
                                                             <div style="width: 100%; max-height: 100%; display: inline-block; margin-left: -158px">
+                                                            <!-- 대표이미지 -->
                                                                 {% if exhibition.exhibitionfile_set.all %}
                                                                     {% for file in exhibition.exhibitionfile_set.all %}
                                                                         {% if forloop.counter0 == 0 %}
@@ -138,7 +121,7 @@
                                                         </div>
                                                     </div>
                                                     
-                                                    <!-- 미리보기 쪽 -->
+                                                    <!-- 미리보기  -->
                                                     <div class="prod-image" style="margin-top: 30px; margin-left: 341px">
                                                         <div class="prod-image-item">
                                                             {% if exhibition.exhibitionfile_set.all %}
@@ -174,19 +157,20 @@
                                                             {% endif %}
                                                         </div>
                                                     </div>
+                                                <!-- 공모전 내용 표기 -->
                                                     <div class="exhibition-content-box" id="content">
                                                         {{ exhibition.exhibition_content }}
                                                     </div>
-                                                
-                                                        <a href="{{ exhibition.exhibition_url }}" target="_blank">
-                                                            <button class="button-button button-primary" style="margin-left: 116px;">
-                                                                <span>
-                                                                    <span class="Button_children">
-                                                                        <span>공모전으로 바로가기</span>
-                                                                    </span>
+                                                <!-- 해당 공모전의 url로 바로가기 -->
+                                                    <a href="{{ exhibition.exhibition_url }}" target="_blank">
+                                                        <button class="button-button button-primary" style="margin-left: 116px;">
+                                                            <span>
+                                                                <span class="Button_children">
+                                                                    <span>공모전으로 바로가기</span>
                                                                 </span>
-                                                            </button>
-                                                        </a>
+                                                            </span>
+                                                        </button>
+                                                    </a>
                                                 <!--------공모전 참여 버튼 -----------!-->
                                                    <!--------공모전 참여 버튼 -----------!-->
                                                 <div style="height: 15px"></div>

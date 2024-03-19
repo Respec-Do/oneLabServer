@@ -362,15 +362,16 @@ class MemberMainView(View):
             return render(request, 'main/main-page.html',context)
 
 
-
-# 관리자 VIEW
-
+# 관리자 로그인 View
 class AdminMemberLoginView(View):
     def get(self, request):
+        # 관리자 로그인 페이지로 이동
         return render(request, 'admin/login.html')
 
     def post(self, request):
+        # POST 메소드로 데이터를 받아옴.
         data = request.POST
+        # 받아온 데이터를 다시 구성
         data = {
             'member_email': data['member-email'],
             'member_password': data['member-password'],
@@ -380,23 +381,28 @@ class AdminMemberLoginView(View):
         member = Member.objects.filter(**data)
         url = 'member:admin_login'
         if member.exists():
-            # 성공
+            # 로그인 성공
             request.session['member'] = MemberSerializer(member.first()).data
             return redirect('member:admin_main')
-        # 일괄처리한 것임.
+        # 로그인 실패시 이동할 url
         return redirect(url)
 
+# 관리자 메인 View
 class AdminMainView(View):
     def get(self, request):
+        # 오늘 날짜를 XXXX-XX-XX 의 형태로 저장
         today = timezone.now().date()
+        # 일주일간 날짜 표기를 위해 오늘로부터 6을 빼줌.
         seven_days_ago = today - timedelta(days=6)
+        # VisitRecord중, date__range를 통해 7일간의 방문자수를 가져온다.
         visit_records = VisitRecord.objects.filter(date__range=[seven_days_ago, today])
+        # VisitRecord중, date=today로 오늘 방문자수를 가져온다.
         today_records = VisitRecord.objects.get(date = today)
-
+        # 방문자 총 수를 계산하기 위해 aggregate, Sum을 이용하여 7일간 방문자 수를 더해서 계산.
         visit_records_total = VisitRecord.objects.filter(date__range=[seven_days_ago, today]).aggregate(total=Sum('count'))
         total_count = visit_records_total['total'] if visit_records_total['total'] is not None else 0
 
-        # 각 visit_records의 date 필드를 문자열로 변환하여 직렬화
+        # 각 방문 기록을 직렬화하여 JSON 형태로 변환.
         visit_records_data = [{'date': record.date.strftime('%Y-%m-%d'), 'count': record.count} for record in
                               visit_records]
         visit_records_json = json.dumps(visit_records_data)
@@ -409,18 +415,23 @@ class AdminMainView(View):
 
         return render(request, 'admin/main.html', context)
 
+# 관리자 회원관리 페이지 View
 class AdminMainUserView(View):
     def get(self, request):
+        # 관리자 회원 관리 페이지로 이동
         return render(request, 'admin/main_user.html')
 
 
-
+# 관리자 회원 관리 페이지, REST 방식을 이용한 ListAPI View
 class AdminMainUserListAPI(APIView):
     def get(self, request, page):
+        # 페이지에 표현할 행 개수 (5개)
         row_count = 5
+        # 페이지 offset 설정
         offset = (page -1) * row_count
+        # 페이지 limit 설정
         limit = page * row_count
-
+        # 데이터베이스에서 가져올 column들을 지정
         columns = [
             'id',
             'member_email',
@@ -428,28 +439,45 @@ class AdminMainUserListAPI(APIView):
             'member_phone',
             'created_date'
         ]
-
+        # request에서 가져온 keyword(검색내용, default = '')
         keyword = request.GET.get('keyword', '')
+        # 조건문 초기화
         condition = Q()
+        # 검색 조건 설정 (회원 이름으로 검색하도록함)
         condition |= Q(member_name__icontains=keyword)
 
+        # 검색 조건을 설정한 회원 목록을 가져옴.
         members = Member.objects.filter(condition).values(*columns)[offset:limit]
+        # 총 회원 수를 설정
         total_count = Member.objects.count()
+        # 대학생 회원의 목록(id)을 가져옴. flat=True 사용하여 단순한 값 목록을 가져온다.
+        # (flat=True,는 QuerySet 값의 리스트를 반환할 때 사용되는 옵션)
         university_member_ids = list(University.objects.values_list('member', flat=True))
+        # 학교 회원의 목록을 가져오되, 학교회원의 status또한 같이 가져온다.
         school_members = School.objects.values_list('member', 'school_member_status')
 
         for member in members:
+            # 각 회원의 유형을 member-type의 이름으로 일반회원으로 지정해준다.
             member.setdefault('member-type', '일반회원')
             for school_member in school_members:
+                # 만일 회원의 id값이 학교회원의 member와 같다면,
                 if member['id'] == school_member[0]:
+                    # 그 학교 회원 테이블에 있는 school_member_status값이 0이라면
                     if school_member[1] == 0:
-                        member['member-type'] = '학교 승인대기중'
+                        # member-type은 학교 승인 대기중으로 지정
+                        member['member-type'] = '학교 승인 대기중'
+                    # 그 학교 회원 테이블에 있는 school_member_status 값이 1이라면,
                     elif school_member[1] == 1:
+                        # member-type은 학교회원으로 지정
                         member['member-type'] = '학교회원'
+                    # 학교회원임을 확인했기에 더이상 반복할 필요가 없어서 for 반복문 종료
                     break
+                # 만일 회원이 대학생회원의 id 목록에 있다면
                 elif member['id'] in university_member_ids:
+                    # member-type은 대학생회원으로 지정한다.
                     member['member-type'] = '대학생회원'
 
+        #  member_info에 나타낼 값들을 저장하고 전달.
         member_info = {
             'members' : members,
             'total_count' : total_count,
@@ -458,34 +486,44 @@ class AdminMainUserListAPI(APIView):
 
         return Response(member_info)
 
+# 학교 승인 대기중 -> 학교회원으로 status 전환
 def translate(request):
+    # POST method로 request를 받아온다면,
     if request.method == 'POST':
+        # json 형태로 전달한 request의 body를 data에 저장.
         data = json.loads(request.body)
+        # 전달된 data중, selected_items의 이름으로 전달된 datat를 selected_items로 저장.
         selected_items = data.get("selected_items")
-        print(selected_items)
 
+        # selected_items는 id 값들을 받아오도록 설정했기에
         for item_id in selected_items:
+            # selected_items중 item_id에 해당하는 member의 status를 True로 업데이트해준다.
             try:
                 School.objects.filter(member=item_id).update(school_member_status=True)
-
+            # 항목이 존재하지 않는 경우 무시
             except School.DoesNotExist:
-                pass  # 항목이 존재하지 않는 경우 무시
-
+                pass
+        # 성공적으로 전환이 되었을경우 JsonResponse로 message를 전달
         return JsonResponse({'message': '선택된 항목이 성공적으로 전환되었습니다.'})
-
+    # POST 방식으로 전달이 안되었을 경우 JsonResponse로 error message 전달.
     return JsonResponse({'error': 'POST 요청이 필요합니다.'}, status=400)
 
+# 관리자 공지사항 View
 class AdminMainNotificationView(View):
     def get(self, request):
+        # 관리자 공지사항 페이지로 이동
         return render(request, 'admin/main_notification.html')
 
-
+# 관리자 공지사항 관리 페이지, REST 방식을 이용한 ListAPI View
 class AdminNotificationListAPI(APIView):
     def get(self, request, page):
+        # 한 페이지에 표기할 행의 개수(5개)
         row_count = 5
+        # 페이지 offset 설정
         offset = (page - 1) * row_count
+        # 페이지 limit 설정
         limit = page * row_count
-
+        # 데이터베이스에서 가져올 column 지정
         columns = [
             'id',
             'notification_title',
@@ -493,27 +531,31 @@ class AdminNotificationListAPI(APIView):
             'created_date',
             'notification_view_count'
         ]
-
+        # 공지사항의 카테고리로 분류해서 표기위해 option값을 가져옴
         option = request.GET.get('option')
-
+        # 만일 option값이 커뮤니티라면, filter로 커뮤니티에 해당되는 목록만 가져오고, 커뮤니티의 총 개수를 가져옴
         if option == '커뮤니티':
             notifications = Notification.enabled_objects.filter(notification_status=0).values(*columns)[offset:limit]
             total_count = Notification.enabled_objects.filter(notification_status=0).count()
+        # option이 원랩 이라면, filter로 원랩에 해당되는 목록만 가져오고, 원랩의 총 개수를 가져옴
         elif option == '원랩':
             notifications = Notification.enabled_objects.filter(notification_status=1).values(*columns)[offset:limit]
             total_count = Notification.enabled_objects.filter(notification_status=1).count()
+        # option이 장소공유 라면, filter로 장소공유에 해당되는 목록만 가져오고, 장소공유의 총 개수를 가져옴
         elif option == '장소공유':
             notifications = Notification.enabled_objects.filter(notification_status=2).values(*columns)[offset:limit]
             total_count = Notification.enabled_objects.filter(notification_status=2).count()
+        # option이 공모전 이라면, filter로 공모전에 해당되는 목록만 가져오고, 공모전의 총 개수를 가져옴
         elif option == '공모전':
             notifications = Notification.enabled_objects.filter(notification_status=3).values(*columns)[offset:limit]
             total_count = Notification.enabled_objects.filter(notification_status=3).count()
+        # 그 외의 option 이라면, 전체를 가져오도록 함.
         else:
             notifications = Notification.enabled_objects.values(*columns)[offset:limit]
             total_count = Notification.enabled_objects.count()
 
 
-
+        # 화면으로 넘길 데이터를 notification_info에 저장.
         notification_info= {
             'notifications' : notifications,
             'total_count' : total_count
@@ -521,35 +563,43 @@ class AdminNotificationListAPI(APIView):
 
         return Response(notification_info)
 
+# 공지사항을 삭제하는 함수
 def soft_delete(request):
     if request.method == 'POST':
+        # JSON 형식으로 전달된 body의 데이터를 data에 저장.
         data = json.loads(request.body)
+        # data중 selected_items의 이름의 데이터를 selected_items에 저장.
         selected_items = data.get("selected_items")
-        print(selected_items)
-        # 선택된 항목들의 상태를 0으로 변경하는 코드 작성
+
+        # 선택된 항목들의 상태를 0으로 변경
         for item_id in selected_items:
             try:
                 Notification.objects.filter(id=item_id).update(notification_post_status=False)
-
+            # 항목이 존재하지 않는 경우 무시
             except Notification.DoesNotExist:
-                pass  # 항목이 존재하지 않는 경우 무시
-
+                pass
+        # 성공적으로 삭제되었을때, message 반환
         return JsonResponse({'message': '선택된 항목이 성공적으로 삭제되었습니다.'})
-
+    # POST방식으로 요청이 들어오지 않았을때 error 반환
     return JsonResponse({'error': 'POST 요청이 필요합니다.'}, status=400)
 
 
+# 관리자 공모전 관리 페이지 View
 class AdminMainExhibitionView(View):
     def get(self, request):
+        # 관리자 공모전 관리 페이지로 이동
         return render(request, 'admin/main_exhibition.html')
 
-
+# 관리자 공모전 관리 페에지, REST 방식을 이용한 ListAPI View
 class AdminMainExhibitionListAPI(APIView):
     def get(self, request, page):
+        # 한 페이지에서 표기할 행의 개수(5개)
         row_count = 5
+        # 페이지 offset 설정
         offset = (page -1) * row_count
+        # 페이지 limit 설정
         limit = page * row_count
-
+        # 데이터베이스에서 가져올 column 지정
         columns = [
             'id',
             'exhibition_title',
@@ -557,10 +607,13 @@ class AdminMainExhibitionListAPI(APIView):
             'school__member__member_name',
             'created_date'
         ]
-
+        # annotate, F를 이용하여 school_member_name의 이름으로 school model에서 member model을 참조하여 그 이름을 가져옴.
+        # enabled_objects 함수를 이용하여 status가 1인, 활성화된 값들만 가져오도록 함.
         exhibitions = Exhibition.enabled_objects\
                           .annotate(school_member_name=F('school__member__member_name')).values(*columns)[offset:limit]
+        # 총 개수 count
         total_count = Exhibition.enabled_objects.count()
+        # 페이지에 표기할 값들을 exhibition_info에 저장
         exhibition_info = {
             'exhibitions' : exhibitions,
             'total_count' : total_count
@@ -568,24 +621,27 @@ class AdminMainExhibitionListAPI(APIView):
 
         return Response(exhibition_info)
 
+# exhibition을 soft_delete하기위해 만든 함수
 def soft_delete_exhibition(request):
     if request.method == 'POST':
+        # JSON 형식으로 전달된 body의 데이터를 data에 저장
         data = json.loads(request.body)
+        # data중 selected_items 이름의 데이터를 selected_items에 저장
         selected_items = data.get("selected_items")
-        print(selected_items)
-        # 선택된 항목들의 상태를 0으로 변경하는 코드 작성
+
+        # 선택된 항목들의 상태를 0으로 변경
         for item_id in selected_items:
             try:
                 Exhibition.objects.filter(id=item_id).update(exhibition_post_status=False)
-
+            # 항목이 존재하지 않는 경우 무시
             except Exhibition.DoesNotExist:
-                pass  # 항목이 존재하지 않는 경우 무시
-
+                pass
+        # 성공적으로 status가 전환되었을 때, JsonResponse로 반환할 message
         return JsonResponse({'message': '선택된 항목이 성공적으로 삭제되었습니다.'})
-
+    # POST 방식으로 요청이 들어오지 않을때 반환할 error message
     return JsonResponse({'error': 'POST 요청이 필요합니다.'}, status=400)
 
-
+# 관리자 로그아웃 View
 class AdminMainLogoutView(View):
     def get(self, request):
         request.session.clear()
