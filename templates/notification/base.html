@@ -9,11 +9,20 @@
 {#    공용으로 쓸 css 자리#}
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
     <link rel="icon" href="{% static 'admin/images/header-logo_RE.png' %}" />
+    <link rel="stylesheet" href="{% static 'member/css/header/main-page-header.css' %}" />
+    <link rel="stylesheet" href="{% static 'member/css/header/main-page-header-all.css' %}" />
+    <link rel="stylesheet" href="{% static 'member/css/header/main-page-header-login.css' %}" />
+    <link rel="stylesheet" href="{% static 'member/css/header/main-page-header-login-one.css' %}" />
     {% block static %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-{#    {% include '' %}#}
+    <div class="modal">
+        <div class="warn-modal">
+            <div id="content-wrap"></div>
+        </div>
+    </div>
+
     {% block content %}{% endblock %}
 </body>
 {% block js %}{% endblock %}

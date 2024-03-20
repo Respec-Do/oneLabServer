@@ -72,7 +72,7 @@ INSTALLED_APPS = [
 ]
 
 
-SITE_ID = 2
+SITE_ID = 3
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_LOGOUT_ON_GET = True
@@ -144,11 +144,11 @@ DATABASES = {
         # DATABASE 이름
         'NAME': 'onelab',
         # 계정 이름
-        'USER': 'onelab',
+        'USER': 'myserver',
         # 비밀번호
         'PASSWORD': '1234',
         # DBMS가 설치된 서버 PC의 IP
-        'HOST': '54.180.25.248',
+        'HOST': '3.36.73.100',
         # DBMS의 포트번호
         'PORT': '3306'
     }

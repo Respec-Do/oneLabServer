@@ -1444,12 +1444,17 @@ footer.inner-utils .FooterContainer_container {
 
 
 div.notification-content-box {
-    background-color: #e5fbe5;
+    background-color: #e5fbe514;
     color: #000;
     border-radius: 8px;
     padding: 16px;
-    width: 708px;
-    margin-left: 116px;
+    width: 960px;
+    /*margin-left: 116px;*/
     margin-bottom: 30px;
-    margin-top: 127px;
+    margin-top: 50px;
+    border: #e5fbe5 1px solid;
+}
+
+#content {
+    white-space: pre-line;
 }

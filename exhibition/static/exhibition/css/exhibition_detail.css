@@ -283,14 +283,15 @@ div.comment-notice {
 }
 
 div.exhibition-content-box {
-    background-color: #e5fbe5;
+    background-color: #e5fbe51a;
     color: #000;
     border-radius: 8px;
     padding: 16px;
-    width: 708px;
-    margin-left: 116px;
+    width: 960px;
+    /*margin-left: 116px;*/
     margin-bottom: 30px;
     margin-top: 127px;
+    border: #e5fbe5 1px solid;
 }
 
 
@@ -1058,7 +1059,7 @@ button.comment-ok-btn.active {
     background-color: #008243;
     color: #fff;
     display: block;
-    width: 714px;
+    width: 960px;
     padding: 9px 27px;
     height: 56px;
     font-size: 18px;

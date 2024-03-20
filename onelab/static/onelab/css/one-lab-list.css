@@ -11,6 +11,7 @@ body {
     font-size: 15px;
     font-weight: 400;
     font-family: inherit;
+    margin: 0;
 }
 
 div, h2, span, p, strong, button {

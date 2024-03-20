@@ -7,9 +7,9 @@ from point.managers import UsePointManager
 
 class Point(Period):
     POINT_STATUS = [
-        (1, '사용 중'),
-        (2, '결제 완료'),
-        (3, '결제 취소')
+        (1, '충전'),
+        (2, '사용'),
+        (3, '적립')
 
     ]
 

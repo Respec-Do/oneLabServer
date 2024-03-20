@@ -10,7 +10,7 @@
 {% block title %}공모전 상세페이지{% endblock %}
 
 {% block content %}
-    {% include  "header/main-page-header-login.html"%}
+    {% include 'community/header.html' %}
     <div id="page-container">
             <main id="main" style="visibility: visible">
                 <!-- 헤더 -->
@@ -163,7 +163,7 @@
                                                     </div>
                                                 <!-- 해당 공모전의 url로 바로가기 -->
                                                     <a href="{{ exhibition.exhibition_url }}" target="_blank">
-                                                        <button class="button-button button-primary" style="margin-left: 116px;">
+                                                        <button class="button-button button-primary">
                                                             <span>
                                                                 <span class="Button_children">
                                                                     <span>공모전으로 바로가기</span>
@@ -178,7 +178,7 @@
                                                     <form action="{% url 'exhibition:detail' %}" method="POST" enctype="multipart/form-data">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="id" value="{{ exhibition.id }}">
-                                                        <button type="submit" class="button-button button-primary" style="margin-left: 116px;">
+                                                        <button type="submit" class="button-button button-primary">
                                                             <span>
                                                                 <input type="hidden" name="join-btn">
                                                                 <span class="Button_children">

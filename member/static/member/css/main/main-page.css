@@ -1382,6 +1382,7 @@ button:not(:disabled) {
 .earlybird-desktop-list-item {
     padding: 0 16px;
     width: 33.3333%;
+    height: 673px;
 }
 
 .card-type-project-card {
@@ -1393,6 +1394,7 @@ button:not(:disabled) {
     background-color: #fff;
     overflow: hidden;
     color: #000;
+    height: 608px;
 }
 
 .card-type-card-content {
@@ -1486,7 +1488,7 @@ button:not(:disabled) {
     margin-bottom: 8px;
     border-radius: 3px 3px 0 0;
     width: 100%;
-    height: auto;
+    height: 506px;
     position: relative;
     background-color: #f2f4f6;
 }
