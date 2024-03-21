@@ -29,19 +29,20 @@ def pre_handle_request(get_response):
                 if 'place/detail' in uri:
                     if not School.objects.filter(id=request.session['member']['id']).exists() \
                             and University.objects.filter(id=request.session['member']['id']).exists():
-                        return redirect('member:main')
+                        return redirect('member:login')
 
                 if 'place/write' in uri and 'exhibition/write':
                     if not School.objects.filter(id=request.session['member']['id']).exists():
-                        return redirect('member:main')
+                        return redirect('member:login')
 
                 if 'community' in uri:
                     if School.objects.filter(id=request.session['member']['id']):
-                        return redirect('member:main')
+                        return redirect('member:login')
 
                 if 'point/charge' in uri and 'onelab' in uri and 'share' in uri:
                     if not University.objects.filter(id=request.session['member']['id']):
-                        return redirect('member:main')
+                        return redirect('member:login')
+
 
             if request.user_agent.is_mobile:
                 if 'mobile' not in uri:

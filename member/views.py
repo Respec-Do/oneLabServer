@@ -378,11 +378,12 @@ class AdminMemberLoginView(View):
         }
 
         # exists() 를 사용하기 위해서 QuerySet 객체로 조회
-        member = Member.objects.filter(**data)
+        # first()를 사용하여 첫 번째 멤버 객체를 가져옴.
+        member = Member.objects.filter(**data).first()
         url = 'member:admin_login'
-        if member.exists():
+        if member and member.member_status == False:
             # 로그인 성공
-            request.session['member'] = MemberSerializer(member.first()).data
+            request.session['member'] = MemberSerializer(member).data
             return redirect('member:admin_main')
         # 로그인 실패시 이동할 url
         return redirect(url)
