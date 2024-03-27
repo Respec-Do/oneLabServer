@@ -164,9 +164,35 @@
 
 ### ✔️포인트 확인
 
-- 포인트 결제, 
+- 포인트 결제, 적립, 사용 내역
 
 #### ✔️View
+
+<details>
+<summary>포인트 충전</summary>
+<div markdown="11">
+
+<img src="https://github.com/Respec-Do/django-server/assets/105579519/91a54151-2fd2-4878-abcd-bc21ed94a670"/>
+
+</div>
+</details>
+
+<details>
+<summary>포인트 적립</summary>
+<div markdown="12">
+
+<img src="https://github.com/Respec-Do/django-server/assets/105579519/53d9aabb-8e5f-4ddf-9b16-2d27210fdbb8"/>
+
+</div>
+</details>
+<details>
+<summary>포인트 사용</summary>
+<div markdown="13">
+
+<img src="https://github.com/Respec-Do/django-server/assets/105579519/0b6b4ceb-c29d-436d-b1cf-350bfa7d37ea"/>
+
+</div>
+</details>
 
 
 <h2>프로젝트에서 느낀 점</h2>
