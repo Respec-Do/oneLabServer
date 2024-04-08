@@ -78,7 +78,7 @@
 
 ### ✔️마이페이지
 
-<a href='https://github.com/Respec-Do/oneLabServer/wiki/OneLab-Front-Page'>
+<a href='https://github.com/Respec-Do/oneLabServer/wiki/OneLab-Front-Page' target='_blank'>
   - 마이페이지, 모달창 및 탭별 목록 보기 구현
 </a>
 
