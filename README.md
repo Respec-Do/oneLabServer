@@ -95,8 +95,11 @@
 
 <img width="960" alt="back 진행률" src="https://github.com/Respec-Do/study_python/assets/105579519/3785e576-e49c-476d-ae55-fa443e7f261e">
 
-### ✔️백엔드 페이지 확인
+### ✔️백엔드 Flow-chart 확인
 
+<a href='https://github.com/Respec-Do/oneLabServer/wiki/OneLab-BackEnd-Flow%E2%80%90chart#view-2' target='_blank'>
+  - 관리자 페이지, 공지사항, 공모전 Flow-Chart 바로가기
+</a>
 
 
 <h2>✨프로젝트에서 느낀 점</h2>
