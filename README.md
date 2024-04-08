@@ -74,12 +74,10 @@
 
 <img width="960" alt="front 진행도" src="https://github.com/Respec-Do/django-server/assets/105579519/90e4771f-8931-4913-8ac4-e481474cd921">
 
-## ✔️마이페이지/포인트 확인
-
-### ✔️마이페이지
+### ✔️퍼블리싱 페이지 확인
 
 <a href='https://github.com/Respec-Do/oneLabServer/wiki/OneLab-Front-Page' target='_blank'>
-  - 마이페이지, 모달창 및 탭별 목록 보기 구현
+  - 마이페이지, 모달창 및 탭별 목록 보기 구현 바로가기
 </a>
 
 
@@ -93,9 +91,12 @@
 - 공지사항
 - 공모전/대회
 
-### ✔️백엔드 진행률
+## ✔️백엔드 진행률
 
 <img width="960" alt="back 진행률" src="https://github.com/Respec-Do/study_python/assets/105579519/3785e576-e49c-476d-ae55-fa443e7f261e">
+
+### ✔️백엔드 페이지 확인
+
 
 
 <h2>✨프로젝트에서 느낀 점</h2>
