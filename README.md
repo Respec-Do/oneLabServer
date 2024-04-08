@@ -78,7 +78,10 @@
 
 ### ✔️마이페이지
 
-- 마이페이지, 모달창 및 탭별 목록 보기 구현
+<a href='https://github.com/Respec-Do/oneLabServer/wiki/OneLab-Front-Page'>
+  - 마이페이지, 모달창 및 탭별 목록 보기 구현
+</a>
+
 
 ### ✔️ERD
 
