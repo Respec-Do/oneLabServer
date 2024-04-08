@@ -77,7 +77,7 @@
 ### ✔️퍼블리싱 페이지 확인
 
 <a href='https://github.com/Respec-Do/oneLabServer/wiki/OneLab-Front-Page' target='_blank'>
-  - 마이페이지, 모달창 및 탭별 목록 보기 구현 바로가기
+   📸마이페이지, 모달창 및 탭별 목록 보기 구현 바로가기
 </a>
 
 
@@ -98,7 +98,7 @@
 ### ✔️백엔드 Flow-chart 확인
 
 <a href='https://github.com/Respec-Do/oneLabServer/wiki/OneLab-BackEnd-Flow%E2%80%90chart#view-2' target='_blank'>
-  - 관리자 페이지, 공지사항, 공모전 Flow-Chart 바로가기
+   📸관리자 페이지, 공지사항, 공모전 Flow-Chart 바로가기
 </a>
 
 
