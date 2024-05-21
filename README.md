@@ -101,6 +101,15 @@
    📸관리자 페이지, 공지사항, 공모전 Flow-Chart 바로가기
 </a>
 
+---
+
+<h2>✔️AI 프로젝트 소개</h2>
+
+<a href='https://github.com/Respec-Do/oneLabServer/wiki/OneLab-Front-Page' target='_blank'>
+   📸AI 프로젝트 바로가기
+</a>
+
+---
 
 <h2>✨프로젝트에서 느낀 점</h2>
 
