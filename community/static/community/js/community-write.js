@@ -84,13 +84,13 @@ const formFieldHelper = document.querySelector('.form-field-helper');
 textarea.addEventListener('input', function() {
     // textarea에 입력된 글자 수 계산
     const length = textarea.value.length;
-    
+
     // 최대 글자 수는 2000
     const maxLength = 2000;
-    
+
     // 남은 글자 수를 계산합니다.
     const remaining = maxLength - length;
-    
+
     formFieldHelper.textContent = remaining + '자 남음';
 });
 
@@ -127,3 +127,82 @@ typeBtns.forEach((typeBtn) => {
         }
     })
 })
+
+function getCSRFToken() {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith('csrftoken=')) {
+            return cookie.split('=')[1];
+        }
+    }
+    return '';
+}
+
+
+const aiBtn = document.querySelector('#aiButton');
+const box = document.querySelector('.ai-recommend-container')
+const save_btn = document.querySelector('.save-btn');
+aiBtn.addEventListener('click', async (e) => {
+    const loading = document.getElementById('loading');
+    const title = document.querySelector('input[name="community-title"]').value
+    const radio_active = document.querySelector('.radio-icon.active').parentElement;
+    const inputValue = radio_active.querySelector('input').value;
+    const csrfToken = getCSRFToken();
+    const result_boxes = document.querySelectorAll('#result1')
+
+    // console.log(title)
+    // console.log(inputValue)
+    loading.style.display = 'block'
+    const response = await fetch("/ai/similar/", {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({
+            title: title,
+            radio_active: inputValue
+
+        })
+    });
+    loading.style.display = 'none';
+    box.style.display = 'block';
+    const results = await response.json();
+    console.log(results);
+
+
+    result_boxes.forEach((result_box, index)=>{
+        result_box.innerHTML = results.similar_communities[index];
+        result_box.parentElement.addEventListener('click', (e)=>{
+            textarea.innerHTML = ''
+            textarea.innerText = results.similar_communities[index];
+            box.style.display = 'none'
+            save_btn.classList.add('disabled-button')
+            save_btn.style.backgroundColor = '#808080'
+        })
+    })
+
+});
+
+const warning = document.querySelector('.warning')
+textarea.addEventListener('keyup', function() {
+    //console.log(textarea.value)
+    save_btn.classList.remove('disabled-button')
+    save_btn.style.backgroundColor = '#008243'
+    warning.style.display = 'none'
+})
+
+const form = document.getElementById('submit-form')
+
+save_btn.addEventListener('click', (e)=> {
+    // console.log('클릭')
+
+    if (save_btn.classList.contains('disabled-button')) {
+        e.preventDefault()
+        warning.style.display = 'block'
+    } else {
+        form.submit();
+    }
+})
+

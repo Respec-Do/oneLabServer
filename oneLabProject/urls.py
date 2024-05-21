@@ -26,6 +26,7 @@ urlpatterns = [
     path('exhibition/', include('exhibition.urls')),
     path('upload/<path:file_path>/', ExhibitionFileDownloadView.as_view(), name='exhibition-down'),
     path('notification/', include('notification.urls')),
+    path('ai/', include('ai.urls')),
     path('', MainView.as_view(), name='main'),
 ]
 

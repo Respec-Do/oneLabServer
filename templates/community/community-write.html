@@ -82,15 +82,26 @@
                                 <div class="banner-link-button-icon">
                                     <i class="banner-guide-gpt-icon"></i>
                                 </div>
-                                <div class="banner-link-button-content">
+                                <div id="aiButton" class="banner-link-button-content">
                                     <p class="banner-link-button-content">
-                                        <p class="banner-link-button-description">궁금한 모든 것을 물어보세요</p>
                                         <strong class="banner-link-button-title">AI 어드바이저</strong>
+                                        <p class="banner-link-button-description">제목과 유형으로 내용을 추천해드립니다!</p>
                                     </p>
                                 </div>
                             </button>
                         </div>
-
+                        <div class="ai-recommend-container">
+                            <div class="ai-recommend-content-box">
+                                <span id ='result1'></span>
+                            </div>
+                            <div class="ai-recommend-content-box">
+                                <span id ='result1'></span>
+                            </div>
+                            <div class="ai-recommend-content-box">
+                                <span id ='result1'></span>
+                            </div>
+                        </div>
+                        <img src="{% static 'community/images/loading.gif' %}" id="loading"> 
                         <div class="page-content">
                             <nav class="project-navbar-container">
                                 <div style="display: flex; align-items: center;">
@@ -286,7 +297,7 @@
                                     </a>
                                 </div>
                             </nav>
-                            <form action="{% url 'community:write' %}" method="post" name="write-form" enctype="multipart/form-data">
+                            <form id="submit-form" action="{% url 'community:write' %}" method="post" name="write-form" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <section class="section-container" style="max-width: 630px;">
                                     <div class="section-header" style="width: 400px">
@@ -418,6 +429,7 @@
                                         <span class="save-btn-text">저장하기</span>
                                     </span>
                                 </button>
+                                <p class="warning">* 내용을 수정한 다음 저장해주세요</p>
                             </form>
                         </div>
                     </section>
