@@ -103,14 +103,6 @@
 
 ---
 
-<h2>✔️AI 프로젝트 소개</h2>
-
-<a href='https://github.com/Respec-Do/oneLabServer/wiki/OneLab-Front-Page' target='_blank'>
-   📸AI 프로젝트 바로가기
-</a>
-
----
-
 <h2>✨프로젝트에서 느낀 점</h2>
 
 <h3>✨1. 어려웠던 부분을 이렇게 해결했습니다.</h3>
