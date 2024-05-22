@@ -4,7 +4,7 @@
 
 <h2>AI 프로젝트 소개</h2>
 
-- 게시글 내용 자동 완성 추천 시스템
+- 게시글 내용 추천 시스템
 > 이번 AI 프로젝트에서 제가 구현한 기능은 게시글 내용을 추천해주는 시스템을 구현했습니다.
 
 <h2>목차</h2>
@@ -16,6 +16,7 @@
 - Error 확인
 - 화면 수정
 - 배포
+- 느낀점
 
 ---
 
@@ -87,6 +88,12 @@
 <h3>Cosine_Similarity 이용하여 유사도 분석</h3>
 
 - Jupyter Notebook에서 앞서 만든 데이터에서 제목과 내용, 그리고 글의 범주를 이용하여 유사도 분석을 진행했습니다.
+- 제목, 내용 그리고 범주를 우선 하나의 긴 문자열로 연결했습니다.
+- 긴 문자열로 만들어진 새로운 데이터프레임을 만들고 그 데이터프레임을 CountVectorizer에 fit_transform하여 벡터화를 해주었습니다.
+- 벡터화 된 metrix를 Sklearn의 Cosine_Similarity에 넣고 유사도를 나타내었습니다.
+- 이때 나타난 유사도는 metrix형태이기에 list로 바꾼 다음 유사도가 높은 순서대로 다시 바꿔주었습니다.
+- enumerate를 이용하여 key값을 인덱스로 나타나게 하였습니다.
+- 이 인덱스를 토대로 get_title_from_index라는 함수를 만들어 제목을 가져오게 했습니다.
 
 <details><summary>코드 확인</summary>
 
@@ -110,16 +117,43 @@
 
 <img width="960" alt="cs4" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/67b25334-c58c-4e75-902d-000cbc2aee1c">
 
+- 유사한 제목을 가져오는 것을 확인할 수 있었습니다.
+- 위의 로직을 이용하여 Django에 넣어 주었습니다.
+
 </details>
 
+---
+
+<h3>Django</h3>
+
+- 제목과 태그만 입력한 다음 자동완성 버튼을 누르면 데이터 베이스 내의 모든 커뮤니티 게시글을 확인하고 유사도 검사를 진행한 다음, 가장 유사도가 높은 제목의 내용을 화면상으로 나타내는 것이 목표입니다.
+- 위 목표를 위해 수정할 파일들은 다음과 같습니다.
+  
+  1. HTML, CSS
+  2. JS
+  3. View
 
 
+<h4>HTML, CSS</h4>
 
+- 화면상에서 자동완성 버튼을 눌렀을 때, View를 통해 가장 유사도가 높은 3개의 내용을 추천하는 Div 태그를 새로 만들었습니다.
+- 비동기 방식으로 내용을 불러오는 동안 Loading 하는 이미지도 포함하였습니다.
+- CSS 파일은 따로 표기하지 않았습니다.
 
+<details><summary>화면 확인</summary>
+<br>
 
+</details>
 
+<details><summary>코드 확인</summary>
+<br>
+<img width="500" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/49600bc6-da17-489b-b752-7ec9cfef8474">
+</details>
 
+<h4>JS</h4>
 
+- 버튼을 눌렀을 때 view로 보내기 위해 비동기 방식을 이용하여 JavaScript를 구성했습니다. 
+- 
 
 
 
