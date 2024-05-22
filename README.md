@@ -138,6 +138,7 @@
 
 - 화면상에서 자동완성 버튼을 눌렀을 때, View를 통해 가장 유사도가 높은 3개의 내용을 추천하는 Div 태그를 새로 만들었습니다.
 - 비동기 방식으로 내용을 불러오는 동안 Loading 하는 이미지도 포함하였습니다.
+- 내용을 수정하지 않으면 저장하기 버튼을 비활성화해서 내용을 수정하게끔 했습니다.
 - CSS 파일은 따로 표기하지 않았습니다.
 
 <details><summary>화면 확인</summary>
@@ -147,8 +148,10 @@
 
 <details><summary>코드 확인</summary>
 <br>
-<img width="500" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/49600bc6-da17-489b-b752-7ec9cfef8474">
+  <img width="600" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/49600bc6-da17-489b-b752-7ec9cfef8474">
+  <img width="600" alt="html2" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/35a37548-b074-4dd0-adac-999c431227df">
 </details>
+
 
 <h4>JS</h4>
 
