@@ -13,9 +13,8 @@
 - 데이터 수집(Data Crowling)
 - Cosine_Similarity 이용하여 유사도 분석
 - Django
-- Error 확인
-- 화면 수정
-- 배포
+- 서버 배포 및 화면 시연
+- Trouble-Shooting
 - 느낀점
 
 ---
@@ -126,7 +125,7 @@
 
 <h3>Django</h3>
 
-- 제목과 태그만 입력한 다음 자동완성 버튼을 누르면 데이터 베이스 내의 모든 커뮤니티 게시글을 확인하고 유사도 검사를 진행한 다음, 가장 유사도가 높은 제목의 내용을 화면상으로 나타내는 것이 목표입니다.
+- 제목과 범주주만 입력한 다음 자동완성 버튼을 누르면 데이터 베이스 내의 모든 커뮤니티 게시글을 확인하고 유사도 검사를 진행한 다음, 가장 유사도가 높은 제목의 내용을 화면상으로 나타내는 것이 목표입니다.
 - 위 목표를 위해 수정할 파일들은 다음과 같습니다.
   
   1. HTML, CSS
@@ -143,8 +142,21 @@
 
 <details><summary>화면 확인</summary>
 <br>
+<img width="600" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/cf5feeb7-f4a6-4b2a-9e25-383797c16b8b">
 
+- 표기한 부분에 제목을 입력하고 해당되는 범주를 고른 다음 오른쪽의 ai 자동추천 버튼을 누릅니다.
+
+<img width="600" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/fee5aefc-a1ec-41e2-b9b2-d60aecb6e4ac">
+
+- 유사도가 가장 높은 내용 중 상위 3개의 내용을 표현합니다.
+- 이 중 하나를 선택합니다.
+
+<img width="600" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/e34ec4ae-a084-4ef7-a8c3-539ed7d0c2b2">
+
+- 선택한 내용이 게시글 작성 부분으로 들어갑니다.
+- 이 때, 내용을 수정하지 않으면 저장되지 않도록 저장버튼을 비활성화합니다.
 </details>
+
 
 <details><summary>코드 확인</summary>
 <br>
@@ -152,12 +164,130 @@
   <img width="600" alt="html2" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/35a37548-b074-4dd0-adac-999c431227df">
 </details>
 
-
 <h4>JS</h4>
 
-- 버튼을 눌렀을 때 view로 보내기 위해 비동기 방식을 이용하여 JavaScript를 구성했습니다. 
-- 
+- 내용 추천 버튼을 눌렀을 때 view로 보내기 위해 비동기 방식을 이용하여 JavaScript를 구성했습니다. 
+> 상세 설명은 주석을 통해 확인하실 수 있습니다.
+
+<details><summary>코드 확인</summary>
+<br>
+  <img width="800" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/ec59a8a9-d9ad-4ed5-9e6f-717b0953d0ec">
+  <img width="800" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/63c44e13-5ba7-4cf2-a9ff-3965fccccf9c">
+  <img width="800" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/ae30761a-9b14-4d09-9b88-af79be234dd6">
+</details>
+
+<h4>Django</h4>
+
+- JavaScript로 비동기통신 방식을 이용하기 위해 view 와 url을 작성하였습니다.
+- 앞선 JupyterNotebook으로 작성한 코드를 View에 모듈화하였습니다.
+
+**상세 설명**
+
+- AIView
+  - Post 방식으로 json 형태로 통신된 데이터를 data에 담아줍니다.
+  - 제목과 범주를 title과 radio_active 라는 변수에 할당합니다.
+  - radio_active는 수치형이기에 translate_status 함수를 통해 범주이름으로 변경합니다.
+  - 제목과 범주를 하나의 문자열로 만들어주고 get_similar_communities 함수를 호출합니다.
+  - <details><summary>코드 보기</summary>
+    <img width="800" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/f341703e-905a-450c-9c10-416fa3a28638">
+  </details>
+
+    
+- get_similar_communities
+  - community.objects.all을 통해 커뮤니티의 모든 내용을 가져옵니다.
+  - 가져온 community를 make_dataframe 함수를 통해 df라는 데이터프레임으로 만들어줍니다.
+  - Sklearn의 CountVectorizer()를 호출합니다.
+  - df 데이터프레임에 make_dataframe 함수를 통해 미리 만들어진 combined_features 를 CountVectorizer에 담아 Count_Matrix로 만들어줍니다.
+  - 앞서만든 하나의 문자열 (제목과 범주) 또한 CountVectorizer에 담아 title_vector_matrix로 만들어줍니다.
+  - Sklearn의 Cosine_Similarity를 호출하여 데이터프레임으로 만들어진 Count_Matrix와 title_vector_matrix간의 유사도를 구합니다.
+  - 구해진 유사도를 enumerate를 통해 index를 나타나게 하고, list에 담아 similar_community라는 변수에 할당합니다.
+  - 할당된 similar_community를 다시 유사도가 높은 순서로 정렬하여 similar_community_sorted라는 변수에 할당합니다.
+  - 유사도가 가장 높은 3개를 추출합니다.
+  - 이때, 기존의 데이터프레임에 유사도가 가장 높은 상위 3개의 인덱스를 참조하여 similar_content라는 리스트에 append하여 return 해줍니다.
+  - <details><summary>코드 보기</summary>
+      <img width="800" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/8a40cacb-6fc9-498a-b436-e901c9ddd475">
+    </details>
 
 
+- AIView
+  - 다시 AIView로 돌아와서 get_similar_communities 함수로 return 된 similar_content를 similar_communities라는 변수에 할당해줍니다.
+  - JsonResponse를 통해 similar_communities를 return하고 비동기통신을 종료합니다.
+  - <details><summary>코드 보기</summary>
+      <img width="800" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/009b8d77-f6ec-4f35-94e1-0b10ed6dcc9f">
+    </details>
 
+- make_dataframe
+  - 불러온 community의 데이터 중 제목과 내용 그리고 범주를 list로 묶은 다음 데이터프레임으로 만듭니다.
+  - post_status가 수치형이기 때문에 translate_status 함수로 문자로 변환해줍니다.
+  - combined_features 라는 새로운 feature로 concatenate 라는 함수를 통해 하나의 문자열로 만들어줍니다.
+  - 그 데이터프레임을 return으로 반환합니다.
+  - <details><summary>코드 보기</summary>
+      <img width="800" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/b8d2379d-2572-4247-bc75-cd53fcfaebe9">
+    </details>
+
+- translate_status & concatenate
+  - 수치형인 범주값을 문자로 변환해주는 함수와 하나의 문자열로 만들어주는 함수입니다.
+  - <details><summary>코드 보기</summary>
+      <img width="800" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/233658ce-adeb-4059-8b2e-55c526552835">
+    </details>
+
+---
+
+<h3>서버 배포 및 화면 시연</h3>
+
+- 로컬에서 구현한 기능이 정상적으로 작동이 되는 것을 확인하고 이를 ubuntu를 이용하여 서버에 배포하였습니다.
+
+---
+
+<h3>Trouble-Shooting</h3>
+
+- JavaScript에서 비동기 통신을 이용하여 view로 원하는 데이터를 넘길 때 다음과 같은 에러를 경험했습니다.
+  - await fetch() 를 이용하여 url을 통해 view로 넘어갈 때 url을 찾지 못하는 Not Found 에러
+  - CSRF-Token을 찾지 못하여 Not Certificated Token 에러
+  - View로 넘어왔지만 같이 넘어온 데이터가 None 인 에러
+  - Django에서 비동기 방식으로 데이터를 불러오는 중 발생한 문제
+ 
+<h4>await fetch() 를 이용하여 url을 통해 view로 넘어갈 때 url을 찾지 못하는 Not Found 에러</h4>
+
+- url 경로를 제대로 설정해 주었는데도 불구하고 Not Found 에러가 나타났습니다.
+- 경로를 다시 추적을 해보니, Main url 파일에 새로이 만든 ai url을 추가하지 않아 못 찾는 것을 파악하고 추가해주었습니다.
+- 수정한 다음 다시 확인하니 View로 넘어가는 것을 파악했으나, CSRF-Token 에러가 나타났습니다.
+
+<h4>CSRF-Token을 찾지 못하여 Not Certificated Token 에러</h4>
+
+- View로 넘어간 것을 확인하고자 했으나 개발자 도구에서 Token과 관련된 에러가 나타나는 것을 확인했습니다.
+- HTML상 form태그안에 CSRF-Token 있었으나, 비동기 통신 방식으로 통신할 때 token이 포함되지 않는 것을 확인했습니다.
+- Javascript에서 CSRF-Token을 가져오는 함수를 만들어 직접 가져와서 csrftoken 이라는 변수에 할당하여 await fetch()에 headers에 담아주었습니다.
+- <details><summary>코드 보기</summary>
+    <img width="800" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/c1fdb71c-52c4-4b26-b5c7-64e23991511f">
+    <img width="800" alt="html1" src="https://github.com/Respec-Do/django_with_AI/assets/105579519/e27b21e2-2a27-4a1f-88a2-3c9686b99ae8">
+  </details>
+
+<h4>View로 넘어왔지만 같이 넘어온 데이터가 None 인 에러</h4>
+
+- CSRF-Token 문제를 해결한 다음 다시 확인했으나, View를 통해 받아와 함수로 넘긴 데이터가 없다고 나타났습니다.
+- print를 하나씩 찍어보면서 확인한 결과, Javascript에서 비동기통신으로 받아온 데이터가 None으로 확인이 되었습니다.
+- 다시 Javascript로 넘어가서 문제를 확인했을 때, 데이터를 <code>body: JSON.stringify </code>의 형태로 담아서 전달했는데 View에서는 request.post로 데이터를 받아오고 있던 것이었습니다.
+- 이를 확인하여 다시 json.loads(requests.body)로 바꿔주고 다시 print하여 확인한 결과 정상적으로 원하는 데이터가 넘어오게 되었습니다.
+
+<h4>Django에서 비동기 방식으로 데이터를 불러오는 중 발생한 문제</h4>
+
+- 데이터를 불러오는 중, 화면이 빈 상태로 있는 문제가 발생하였습니다.
+- 이를 해결하기 위해 로딩을 의미하는 GIF를 화면상에 표기하는 로직을 추가하여 개선하였습니다.
+
+---
+
+<h3>느낀점</h3>
+
+- 이번 프로젝트를 통해 Django와 AI를 결합한 웹 애플리케이션을 개발하는 귀중한 경험을 할 수 있었습니다.
+- 데이터 수집부터 유사도 분석, 그리고 실제 서버 배포까지 전 과정을 직접 경험하며, 다양한 시행착오를 겪으면서 많은 것을 배웠습니다.
+- Cosine Similarity를 이용한 유사도 분석을 통해 사용자가 원하는 내용을 자동으로 추천하는 기능을 성공적으로 구현할 수 있었습니다.
+- 특히 Trouble-Shooting 과정에서 여러 에러들을 하나씩 확인하고 수정하면서, 문제 해결 능력과 디버깅 역량을 크게 향상시켰습니다.
+- 또한, 비동기 통신을 활용하여 사용자 경험을 향상시키는 방법을 익히고, 비동기 통신의 중요성과 이를 효과적으로 구현하는 방법에 대한 깊은 이해를 얻을 수 있었습니다.
+
+<h3>앞으로의 포부</h3>
+
+- 이번 프로젝트를 바탕으로 더 복잡하고 다양한 AI 모델을 웹 애플리케이션에 통합하는 방법을 연구하고 개발하고 싶습니다.
+- 머신러닝과 딥러닝을 활용한 데이터 분석 및 예측 모델을 개발하여 더욱 정교한 추천 시스템을 만들고자 합니다.
+- 대규모 데이터를 처리하고 분석하는 능력을 키워, 실시간으로 사용자에게 맞춤형 콘텐츠를 제공하는 시스템을 구축하고 싶습니다.
 
