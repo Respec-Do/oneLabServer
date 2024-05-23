@@ -139,10 +139,11 @@ function getCSRFToken() {
     return '';
 }
 
-
+// 필요한 변수를 선언합니다.
 const aiBtn = document.querySelector('#aiButton');
 const box = document.querySelector('.ai-recommend-container')
 const save_btn = document.querySelector('.save-btn');
+let temp = '';
 // 비동기 방식으로 추천된 내용을 가져오기 위해 addEventListener에 async로 설정해줍니다.
 aiBtn.addEventListener('click', async (e) => {
     // 로딩되는 화면을 구현하기 위해 loading이라는 id를 불러와서 할당합니다.
@@ -184,7 +185,6 @@ aiBtn.addEventListener('click', async (e) => {
     const results = await response.json();
     console.log(results);
 
-
     result_boxes.forEach((result_box, index)=>{
         // div에 각각 index로 가져온 유사도가 높은 내용을 담아줍니다.
         result_box.innerHTML = results.similar_communities[index];
@@ -197,6 +197,8 @@ aiBtn.addEventListener('click', async (e) => {
             // 추천된 내용을 그대로 저장하는 것을 방지하기 위해 저장 버튼을 비활성화해줍니다.
             save_btn.classList.add('disabled-button')
             save_btn.style.backgroundColor = '#808080'
+            // 현재 추천된 내용을 temp에 저장합니다.
+            temp = results.similar_communities[index];
         })
     })
 
@@ -206,12 +208,20 @@ aiBtn.addEventListener('click', async (e) => {
 const warning = document.querySelector('.warning')
 // 내용의 수정을 감지하기 위해 EventListener의 keyup을 이용합니다.
 textarea.addEventListener('keyup', function() {
-    //console.log(textarea.value)
-    // keyup이 감지되면 저장 버튼을 다시 활성화합니다.
-    save_btn.classList.remove('disabled-button')
-    save_btn.style.backgroundColor = '#008243'
-    // 경고 문구의 display를 none으로 바꿔줍니다.
-    warning.style.display = 'none'
+    // keyup이 감지될때 내용이 수정되어야 저장버튼을 활성화합니다.
+    if (textarea.value !== temp) {
+        save_btn.classList.remove('disabled-button')
+        save_btn.style.backgroundColor = '#008243'
+        // 경고 문구의 display를 none으로 바꿔줍니다.
+        warning.style.display = 'none'
+    } else {
+        // textarea의 내용이 temp와 동일하면 저장버튼을 비활성화합니다.
+        save_btn.classList.add('disabled-button')
+        save_btn.style.backgroundColor = '#808080'
+    }
+
+
+
 })
 
 // 저장 버튼을 눌렀을 때 submit을 해주기 위해 form 태그를 불러와서 할당합나디.
