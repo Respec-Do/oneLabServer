@@ -143,18 +143,28 @@ function getCSRFToken() {
 const aiBtn = document.querySelector('#aiButton');
 const box = document.querySelector('.ai-recommend-container')
 const save_btn = document.querySelector('.save-btn');
+// 비동기 방식으로 추천된 내용을 가져오기 위해 addEventListener에 async로 설정해줍니다.
 aiBtn.addEventListener('click', async (e) => {
+    // 로딩되는 화면을 구현하기 위해 loading이라는 id를 불러와서 할당합니다.
     const loading = document.getElementById('loading');
+    // 비동기방식을 이용하여 view로 제목을 보내기위해 제목의 value를 불러와서 할당합니다.
     const title = document.querySelector('input[name="community-title"]').value
+    // 비동기방식을 이용하여 view로 범주를 보내기 위해 선택된 범주의 value를 가져옵니다.
     const radio_active = document.querySelector('.radio-icon.active').parentElement;
     const inputValue = radio_active.querySelector('input').value;
+    // post 방식으로 보낼 때 필요한 csrf_token을 가져오는 함수를 이용합니다.
     const csrfToken = getCSRFToken();
+    // 비동기 방식을 이용하여 가져온 내용을 저장할 div를 가져옵니다.
     const result_boxes = document.querySelectorAll('#result1')
 
     // console.log(title)
     // console.log(inputValue)
+
+    // 내용을 가져오는 동안 화면상에서 로딩 중임을 표시하기 위해 loading의 display를 block으로 표시합니다.
     loading.style.display = 'block'
+    // response라는 변수에 await 로 ai/similar 라는 경로를 통해 view로 비동기통신을 합니다.
     const response = await fetch("/ai/similar/", {
+        // post 방식을 이용하여 csrftoken을 포함하여 앞서 설정한 제목과 범주 값을 JSON형태로 body에 담아 전송합니다.
         method: 'POST',
         headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -166,18 +176,25 @@ aiBtn.addEventListener('click', async (e) => {
 
         })
     });
+    //  비동기 통신으로 view에서 값을 받아오기 전 로딩되는 화면을 다시 display none으로 바꿔줍니다.
     loading.style.display = 'none';
+    // 내용을 받아와서 표시해주기 위해, 미리 만들어둔 div의 display를 block으로 바꿔줍니다.
     box.style.display = 'block';
+    // response로 view를 통해 받아온 내용을 results에 담아줍니다.
     const results = await response.json();
     console.log(results);
 
 
     result_boxes.forEach((result_box, index)=>{
+        // div에 각각 index로 가져온 유사도가 높은 내용을 담아줍니다.
         result_box.innerHTML = results.similar_communities[index];
+        // 추천된 내용을 누르게 되면 addEventListener의 click 이벤트를 통해 내용 작성하는 곳에 추천된 내용을 담아줍니다.
         result_box.parentElement.addEventListener('click', (e)=>{
             textarea.innerHTML = ''
             textarea.innerText = results.similar_communities[index];
+            // 추천된 내용이 옮겨 졌기 때문에, 기존의 추천을 받은 내용의 div는 display를 none으로 바꿔줍니다.
             box.style.display = 'none'
+            // 추천된 내용을 그대로 저장하는 것을 방지하기 위해 저장 버튼을 비활성화해줍니다.
             save_btn.classList.add('disabled-button')
             save_btn.style.backgroundColor = '#808080'
         })
@@ -185,23 +202,29 @@ aiBtn.addEventListener('click', async (e) => {
 
 });
 
+// 내용을 수정하지 않고 저장을 누르게되면 경고문구를 표기하기 위해 해당되는 내용을 불러와서 warning에 할당합니다.
 const warning = document.querySelector('.warning')
+// 내용의 수정을 감지하기 위해 EventListener의 keyup을 이용합니다.
 textarea.addEventListener('keyup', function() {
     //console.log(textarea.value)
+    // keyup이 감지되면 저장 버튼을 다시 활성화합니다.
     save_btn.classList.remove('disabled-button')
     save_btn.style.backgroundColor = '#008243'
+    // 경고 문구의 display를 none으로 바꿔줍니다.
     warning.style.display = 'none'
 })
 
+// 저장 버튼을 눌렀을 때 submit을 해주기 위해 form 태그를 불러와서 할당합나디.
 const form = document.getElementById('submit-form')
 
 save_btn.addEventListener('click', (e)=> {
     // console.log('클릭')
-
+    // 저장 버튼이 눌렸을 때, 비활성화되어 있다면, submit을 막고 경고문구를 활성화합니다.
     if (save_btn.classList.contains('disabled-button')) {
         e.preventDefault()
         warning.style.display = 'block'
     } else {
+        // 저장 버튼이 활성화되어 있다면 form 태그를 submit합니다.
         form.submit();
     }
 })
