@@ -163,6 +163,7 @@ aiBtn.addEventListener('click', async (e) => {
 
     // 내용을 가져오는 동안 화면상에서 로딩 중임을 표시하기 위해 loading의 display를 block으로 표시합니다.
     loading.style.display = 'block'
+    box.style.display = 'none'
     // response라는 변수에 await 로 ai/similar 라는 경로를 통해 view로 비동기통신을 합니다.
     const response = await fetch("/ai/similar/", {
         // post 방식을 이용하여 csrftoken을 포함하여 앞서 설정한 제목과 범주 값을 JSON형태로 body에 담아 전송합니다.
@@ -190,8 +191,9 @@ aiBtn.addEventListener('click', async (e) => {
         result_box.innerHTML = results.similar_communities[index];
         // 추천된 내용을 누르게 되면 addEventListener의 click 이벤트를 통해 내용 작성하는 곳에 추천된 내용을 담아줍니다.
         result_box.parentElement.addEventListener('click', (e)=>{
-            textarea.innerHTML = ''
-            textarea.innerText = results.similar_communities[index];
+            const textarea = document.querySelector('.textarea-input textarea');
+
+            textarea.value = results.similar_communities[index];
             // 추천된 내용이 옮겨 졌기 때문에, 기존의 추천을 받은 내용의 div는 display를 none으로 바꿔줍니다.
             box.style.display = 'none'
             // 추천된 내용을 그대로 저장하는 것을 방지하기 위해 저장 버튼을 비활성화해줍니다.
